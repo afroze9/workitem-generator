@@ -1,7 +1,6 @@
 using System;
 using Xunit;
 
-
 namespace WorkItemGenerator.Tests
 {
     public class UnitTest1

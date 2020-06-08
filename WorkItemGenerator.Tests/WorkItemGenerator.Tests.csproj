@@ -11,6 +11,9 @@
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.153.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.153.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.InteractiveClient" Version="16.153.0" />
   </ItemGroup>
 
 </Project>
