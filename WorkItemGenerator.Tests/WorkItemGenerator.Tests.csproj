@@ -16,4 +16,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Services.InteractiveClient" Version="16.153.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WorkItemGenerator.Models\WorkItemGenerator.Models.csproj" />
+    <ProjectReference Include="..\WorkItemGenerator.Services\WorkItemGenerator.Services.csproj" />
+  </ItemGroup>
+
 </Project>

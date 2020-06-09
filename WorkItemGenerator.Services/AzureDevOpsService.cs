@@ -7,11 +7,35 @@ using System;
 
 namespace WorkItemGenerator.Services
 {
-    public static class AzureDevOpsService
+    public class AzureDevOpsService
     {
-        public static void Sample()
-        {
+        private string PersonalAccessToken { get; set; }
+        public Uri ServerUri { get; private set; }
+        public string ProjectName { get; private set; }
+        public VssConnection Connection { get; private set; }
+        public WorkItemTrackingHttpClient WitClient { get; private set; }
 
+        public AzureDevOpsService(string serverUrl, string projectName, string personalAccessToken)
+        {
+            ServerUri = new Uri(serverUrl);
+            ProjectName = projectName;
+            PersonalAccessToken = personalAccessToken;
+            Init();
+        }
+
+        public AzureDevOpsService(Uri serverUri, string projectName, string personalAccessToken)
+        {
+            ServerUri = serverUri;
+            ProjectName = projectName;
+            PersonalAccessToken = personalAccessToken;
+            Init();
+        }
+
+        private void Init()
+        {
+            VssBasicCredential credentials = new VssBasicCredential(string.Empty, PersonalAccessToken);
+            Connection = new VssConnection(ServerUri, credentials);
+            WitClient = Connection.GetClient<WorkItemTrackingHttpClient>();
         }
     }
 }
