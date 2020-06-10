@@ -13,4 +13,3 @@ namespace WorkItemGenerator.Tests
         }
     }
 }
-

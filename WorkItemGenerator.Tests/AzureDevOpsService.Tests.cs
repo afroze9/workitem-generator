@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using WorkItemGenerator.Models;
 using WorkItemGenerator.Services;
 
 namespace WorkItemGenerator.Tests
