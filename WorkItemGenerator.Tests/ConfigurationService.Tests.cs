@@ -10,6 +10,7 @@ namespace WorkItemGenerator.Tests
 {
     public class ConfigurationServiceTests
     {
+        private static readonly string TestConfigurationFile = "test-config.json";
         private ProjectConfiguration GetTestConfiguration()
         {
             return new ProjectConfiguration()
@@ -71,13 +72,14 @@ namespace WorkItemGenerator.Tests
         [Fact]
         public void ReadConfigurationShouldReadConfigurationFileIntoObject()
         {
-
+            ProjectConfiguration configuration = ConfigurationService.ReadConfiguration(TestConfigurationFile);
+            Assert.NotNull(configuration);
         }
 
         [Fact]
         public void WriteConfigurationShouldWriteConfigurationObjectToFile()
         {
-            string filePath = $"test-config-{DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss")}.json";
+            string filePath = "test-config-" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ".json";
 
             ProjectConfiguration configuration = GetTestConfiguration();
             ConfigurationService.WriteConfiguration(filePath, configuration);
