@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WorkItemGenerator.Models
 {
-    public class WorkItem
+    public class WorkItemModel
     {
         public string WorkItemType { get; set; }
         public Dictionary<string, object> FieldValues { get; set; }

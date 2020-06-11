@@ -10,6 +10,6 @@ namespace WorkItemGenerator.Models
         public string DefaultAreaPath { get; set; }
         public List<Iteration> IterationsToIgnore { get; set; }
         public List<Iteration> IterationsProcessed { get; set; }
-        public List<WorkItem> WorkItems { get; set; }
+        public List<WorkItemModel> WorkItems { get; set; }
     }
 }

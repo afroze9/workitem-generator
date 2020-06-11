@@ -34,9 +34,9 @@ namespace WorkItemGenerator.Tests
                             new Iteration() { IterationID = new Guid("61770D6B-B140-435B-AC61-015D1E92C585"), IterationPath = "Project Name\\Iteration 3" }
                         },
                         Name = "Team A",
-                        WorkItems = new List<WorkItem>()
+                        WorkItems = new List<WorkItemModel>()
                         {
-                            new WorkItem()
+                            new WorkItemModel()
                             {
                                 FieldValues = new Dictionary<string, object>()
                                 {
@@ -47,7 +47,7 @@ namespace WorkItemGenerator.Tests
                                 {
                                     new WorkItemLink()
                                     {
-                                        LinkedWorkItem = new WorkItem()
+                                        LinkedWorkItem = new WorkItemModel()
                                         {
                                             FieldValues = new Dictionary<string, object>()
                                             {

@@ -6,6 +6,6 @@ namespace WorkItemGenerator.Models
     public class WorkItemLink
     {
         public string LinkType { get; set; }
-        public WorkItem LinkedWorkItem { get; set; }
+        public WorkItemModel LinkedWorkItem { get; set; }
     }
 }
