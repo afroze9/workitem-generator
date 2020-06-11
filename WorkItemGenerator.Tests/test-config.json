@@ -1,0 +1,51 @@
+{
+  "CollectionUri": "https://dev.azure.com/afroze-tutorials/",
+  "ProjectName": "Project Name",
+  "ProjectId": "466638e3-fcdd-421f-891f-a5ba8f9e55eb",
+  "TeamConfigurations": [
+    {
+      "ID": "b3f54111-c63d-4070-bddd-bcc096826756",
+      "Name": "Team A",
+      "DefaultAreaPath": "Project Name\\Area A",
+      "IterationsToIgnore": [
+        {
+          "IterationID": "61770d6b-b140-435b-ac61-015d1e92c585",
+          "IterationPath": "Project Name\\Iteration 3"
+        }
+      ],
+      "IterationsProcessed": [
+        {
+          "IterationID": "bee36f19-dda1-4feb-a682-ff178ba216bd",
+          "IterationPath": "Project Name\\Iteration 1"
+        },
+        {
+          "IterationID": "a5a3abe3-6a77-487a-92f6-6bb6b3770486",
+          "IterationPath": "Project Name\\Iteration 2"
+        }
+      ],
+      "WorkItems": [
+        {
+          "WorkItemType": "Meeting",
+          "FieldValues": {
+            "System.Title": "Test Meeting",
+            "System.Description": "This is a test meeting"
+          },
+          "Links": [
+            {
+              "LinkType": "System.LinkTypes.Hierarchy-Forward",
+              "LinkedWorkItem": {
+                "WorkItemType": "Task",
+                "FieldValues": {
+                  "System.Title": "Test Task",
+                  "System.Description": "This is a test child task for the meeting",
+                  "System.AssignedTo": "Afroze Amjad"
+                },
+                "Links": null
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

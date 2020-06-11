@@ -2,15 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
-    <PackageReference Include="coverlet.collector" Version="1.2.0" />
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.153.0" />
     <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.153.0" />
     <PackageReference Include="Microsoft.VisualStudio.Services.InteractiveClient" Version="16.153.0" />
@@ -20,5 +22,9 @@
     <ProjectReference Include="..\WorkItemGenerator.Models\WorkItemGenerator.Models.csproj" />
     <ProjectReference Include="..\WorkItemGenerator.Services\WorkItemGenerator.Services.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="test-config.json" DestinationFolder="$(OutDir)" />
+  </Target>
 
 </Project>
