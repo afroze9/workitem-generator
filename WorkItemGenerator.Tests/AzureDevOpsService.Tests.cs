@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Xunit;
 using WorkItemGenerator.Models;
 using WorkItemGenerator.Services;
+using System.Threading.Tasks;
 
 namespace WorkItemGenerator.Tests
 {
@@ -47,8 +48,23 @@ namespace WorkItemGenerator.Tests
         public void CreateWorkItemShouldCreateMeetingWithoutLinks()
         {
             AzureDevOpsService service = new AzureDevOpsService(WorkingServerUri, WorkingProjectName, WorkingPersonalAccessToken);
-            int id = service.CreateWorkItem(MeetingWithoutLinks);
-            Assert.NotEqual(-1, id);
+            Task<int> creationTask = service.CreateWorkItem(MeetingWithoutLinks);
+            creationTask.Wait();
+
+            Assert.NotEqual(-1, creationTask.Result);
+        }
+
+        [Fact]
+        public void LinkWorkItemsShouldLinkTwoWorkItemsAsParentChild()
+        {
+            int baseItemId = 3;
+            int linkItemId = 4;
+
+            AzureDevOpsService service = new AzureDevOpsService(WorkingServerUri, WorkingProjectName, WorkingPersonalAccessToken);
+            Task<bool> linkingTask = service.LinkWorkItems(baseItemId, linkItemId, LinkType.Child);
+            linkingTask.Wait();
+
+            Assert.True(linkingTask.Result);
         }
     }
 }

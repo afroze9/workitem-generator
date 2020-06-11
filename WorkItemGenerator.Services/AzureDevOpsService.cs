@@ -3,10 +3,12 @@ using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
+using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using System;
 using System.Threading.Tasks;
 using WorkItemGenerator.Models;
+using Newtonsoft.Json.Linq;
 
 namespace WorkItemGenerator.Services
 {
@@ -75,13 +77,36 @@ namespace WorkItemGenerator.Services
         /// </summary>
         /// <param name="item">Work item to create</param>
         /// <returns>Created work item id</returns>
-        public int CreateWorkItem(WorkItemModel item)
+        public async Task<int> CreateWorkItem(WorkItemModel item)
         {
             JsonPatchDocument document = item.ToJsonPathDocument();
-            Task<WorkItem> itemCreationTask = WitClient.CreateWorkItemAsync(document, ProjectName, item.WorkItemType);
-            itemCreationTask.Wait();
+            WorkItem createdItem = await WitClient.CreateWorkItemAsync(document, ProjectName, item.WorkItemType);
+            return createdItem.Id.Value;
+        }
 
-            return itemCreationTask.Result.Id.Value;
+        public async Task<bool> LinkWorkItems(int baseItemId, int linkItemId, string linkType)
+        {
+            string endpoint = $"{WitClient.BaseAddress}_apis/wit/workitems/{linkItemId}";
+
+            JObject linkObject = JObject.FromObject(new
+            {
+                rel = linkType,
+                url = endpoint
+            });
+
+            JsonPatchDocument document = new JsonPatchDocument()
+            {
+                new JsonPatchOperation()
+                {
+                    From = null,
+                    Operation = Operation.Add,
+                    Path = "/relations/-",
+                    Value = linkObject
+                }
+            };
+
+            await WitClient.UpdateWorkItemAsync(document, baseItemId);
+            return true;
         }
     }
 }
