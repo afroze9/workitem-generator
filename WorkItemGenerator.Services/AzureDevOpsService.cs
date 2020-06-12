@@ -1,14 +1,18 @@
-﻿using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
+﻿using Microsoft.TeamFoundation.Core.WebApi;
+using Microsoft.TeamFoundation.Core.WebApi.Types;
+using Microsoft.TeamFoundation.Work.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WorkItemGenerator.Models;
-using Newtonsoft.Json.Linq;
 
 namespace WorkItemGenerator.Services
 {
@@ -32,6 +36,12 @@ namespace WorkItemGenerator.Services
 
         /// <value>Work Item Track Client used to work with work items</value>
         public WorkItemTrackingHttpClient WitClient { get; private set; }
+
+        /// <value>Work Item Track Client used to work with work items</value>
+        public WorkHttpClient WorkClient { get; private set; }
+
+        /// <value>TODO</value>
+        public TeamHttpClient TeamClient { get; private set; }
 
         /// <summary>
         /// Constructor for the service.
@@ -69,6 +79,8 @@ namespace WorkItemGenerator.Services
             VssBasicCredential credentials = new VssBasicCredential(string.Empty, PersonalAccessToken);
             Connection = new VssConnection(ServerUri, credentials);
             WitClient = Connection.GetClient<WorkItemTrackingHttpClient>();
+            TeamClient = Connection.GetClient<TeamHttpClient>();
+            WorkClient = Connection.GetClient<WorkHttpClient>();
         }
 
 
@@ -84,6 +96,13 @@ namespace WorkItemGenerator.Services
             return createdItem.Id.Value;
         }
 
+        /// <summary>
+        /// Creates a link between two work items
+        /// </summary>
+        /// <param name="baseItemId">The id of the work item to update</param>
+        /// <param name="linkItemId">The id of the work item to link</param>
+        /// <param name="linkType">The relation of the linked item to the base item</param>
+        /// <returns>true if successfull</returns>
         public async Task<bool> LinkWorkItems(int baseItemId, int linkItemId, string linkType)
         {
             string endpoint = $"{WitClient.BaseAddress}_apis/wit/workitems/{linkItemId}";
@@ -107,6 +126,57 @@ namespace WorkItemGenerator.Services
 
             await WitClient.UpdateWorkItemAsync(document, baseItemId);
             return true;
+        }
+
+
+        /// <summary>
+        /// Gets a list of teams in the project
+        /// </summary>
+        /// <param name="projectId">Project ID</param>
+        /// <returns>List of teams</returns>
+        public async Task<List<WebApiTeam>> GetTeamsAsync(string projectId)
+        {
+            return await TeamClient.GetTeamsAsync(projectId);
+        }
+
+
+        /// <summary>
+        /// Gets default area for a team
+        /// </summary>
+        /// <param name="projectId">Project ID</param>
+        /// <param name="teamId">Team ID</param>
+        /// <returns>Team default area</returns>
+        public async Task<TeamFieldValues> GetTeamFieldValuesAsync(string projectId, string teamId)
+        {
+            TeamContext context = new TeamContext(projectId, teamId);
+            return await WorkClient.GetTeamFieldValuesAsync(context);
+        }
+
+
+        /// <summary>
+        /// Gets Iterations for a team
+        /// </summary>
+        /// <param name="projectId">Project ID</param>
+        /// <param name="teamId">Team ID</param>
+        /// <returns>List of team iterations</returns>
+        public async Task<List<TeamSettingsIteration>> GetTeamIterationsAsync(string projectId, string teamId)
+        {
+            TeamContext context = new TeamContext(projectId, teamId);
+            return await WorkClient.GetTeamIterationsAsync(context);
+        }
+
+
+        /// <summary>
+        /// Gets the team member capacity information for a team's iteration
+        /// </summary>
+        /// <param name="projectId">Project ID</param>
+        /// <param name="teamId">Team ID</param>
+        /// <param name="iterationId">Iteration ID</param>
+        /// <returns>List of team members and their capacities by activity</returns>
+        public async Task<List<TeamMemberCapacityIdentityRef>> GetTeamMemberCapacities(string projectId, string teamId, Guid iterationId)
+        {
+            TeamContext context = new TeamContext(projectId, teamId);
+            return await WorkClient.GetCapacitiesWithIdentityRefAsync(context, iterationId);
         }
     }
 }
