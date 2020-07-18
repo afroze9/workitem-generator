@@ -3,5 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
+  
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationMarkdown>$(MSBuildProjectDirectory)\..\Documentation\$(AssemblyName).md</DocumentationMarkdown>
+    <VsxmdAutoDeleteXml>True</VsxmdAutoDeleteXml>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="vsxmd" Version="1.4.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

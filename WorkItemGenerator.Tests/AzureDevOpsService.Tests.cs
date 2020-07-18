@@ -6,18 +6,23 @@ using Xunit;
 using WorkItemGenerator.Models;
 using WorkItemGenerator.Services;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace WorkItemGenerator.Tests
 {
+    /// <summary>
+    /// Contains tests for verifying AzureDevOps service implementation
+    /// </summary>
     public class AzureDevOpsServiceTests
     {
-        private static readonly string WorkingServerUrl = @"https://dev.azure.com/afroze-tutorials/";
-        private static readonly Uri WorkingServerUri = new Uri(WorkingServerUrl);
-        private static readonly string WorkingProjectName = "Work Item Generation";
-        private static readonly string WorkingProjectId = "82bd5e17-d317-47a7-b4a1-6971d6b906b2";
-        private static readonly string WorkingTeamId = "7adea90a-367d-438e-9651-93b96f3456a8";
-        private static readonly string WorkingTeamIterationId = "957d1852-eff8-407e-bdd5-bb4c4a0d1fb8";
-        private static readonly string WorkingPersonalAccessToken = "";
+        private static IConfiguration Configuration { get; set; }
+        private static string WorkingServerUrl { get; set; }
+        private static Uri WorkingServerUri { get => string.IsNullOrEmpty(WorkingServerUrl) ? null : new Uri(WorkingServerUrl); }
+        private static string WorkingProjectName { get; set; }
+        private static string WorkingProjectId { get; set; }
+        private static string WorkingTeamId { get; set; }
+        private static string WorkingTeamIterationId { get; set; }
+        private static string WorkingPersonalAccessToken { get; set; }
         private static readonly WorkItemModel MeetingWithoutLinks = new WorkItemModel()
         {
             FieldValues = new Dictionary<string, object>()
@@ -29,6 +34,28 @@ namespace WorkItemGenerator.Tests
             WorkItemType = WorkItemType.Meeting
         };
 
+        /// <summary>
+        /// Initializes tests with values from appsettings.json.
+        /// </summary>
+        public AzureDevOpsServiceTests()
+        {
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            WorkingServerUrl = Configuration.GetSection("WorkingServerUrl").Value;
+            WorkingProjectName = Configuration.GetSection("WorkingProjectName").Value;
+            WorkingProjectId = Configuration.GetSection("WorkingProjectId").Value;
+            WorkingTeamId = Configuration.GetSection("WorkingTeamId").Value;
+            WorkingTeamIterationId = Configuration.GetSection("WorkingTeamIterationId").Value;
+            WorkingPersonalAccessToken = Configuration.GetSection("WorkingPersonalAccessToken").Value;
+
+        }
+
+        /// <summary>
+        /// Checks if the provided configuration is valid (url in string format).
+        /// </summary>
         [Fact]
         public void ConstructorWithStringShouldConnectToServer()
         {
@@ -39,6 +66,9 @@ namespace WorkItemGenerator.Tests
             Assert.NotNull(service.WitClient);
         }
 
+        /// <summary>
+        /// Checks if the provided configuration is valid (url in uri format).
+        /// </summary>
         [Fact]
         public void ConstructorWithUriShouldConnectToServer()
         {
@@ -49,6 +79,9 @@ namespace WorkItemGenerator.Tests
             Assert.NotNull(service.WitClient);
         }
 
+        /// <summary>
+        /// Creates and verifies a work item of type "Meeting".
+        /// </summary>
         [Fact]
         public void CreateWorkItemShouldCreateMeetingWithoutLinks()
         {
@@ -59,6 +92,9 @@ namespace WorkItemGenerator.Tests
             Assert.NotEqual(-1, creationTask.Result);
         }
 
+        /// <summary>
+        /// Creates and verifies a parent-child link between two work items.
+        /// </summary>
         [Fact]
         public void LinkWorkItemsShouldLinkTwoWorkItemsAsParentChild()
         {
@@ -72,6 +108,9 @@ namespace WorkItemGenerator.Tests
             Assert.True(linkingTask.Result);
         }
 
+        /// <summary>
+        /// Verfies that the service returns teams.
+        /// </summary>
         [Fact]
         public void GetTeamsShouldReturnTeams()
         {
@@ -85,6 +124,9 @@ namespace WorkItemGenerator.Tests
             Assert.NotNull(teams);
         }
 
+        /// <summary>
+        /// Verfies that the service returns team field values.
+        /// </summary>
         [Fact]
         public void GetTeamValuesShouldReturnFields()
         {
@@ -98,6 +140,9 @@ namespace WorkItemGenerator.Tests
             Assert.NotNull(fieldValues);
         }
 
+        /// <summary>
+        /// Verfies that the service returns team iterations.
+        /// </summary>
         [Fact]
         public void GetTeamIterationsShouldReturnIterations()
         {
@@ -111,6 +156,9 @@ namespace WorkItemGenerator.Tests
             Assert.NotNull(iterations);
         }
 
+        /// <summary>
+        /// Verfies that the service returns team capactity.
+        /// </summary>
         [Fact]
         public void GetTeamMemberCapacitiesShouldReturnCapacity()
         {

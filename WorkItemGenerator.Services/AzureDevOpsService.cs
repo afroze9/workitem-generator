@@ -34,13 +34,13 @@ namespace WorkItemGenerator.Services
         /// <value>Connection object used by the clients</value>
         public VssConnection Connection { get; private set; }
 
-        /// <value>Work Item Track Client used to work with work items</value>
+        /// <value>Work Item Tracking Client used to work with work items</value>
         public WorkItemTrackingHttpClient WitClient { get; private set; }
 
-        /// <value>Work Item Track Client used to work with work items</value>
+        /// <value>Work Item Tracking Client used to work with work management</value>
         public WorkHttpClient WorkClient { get; private set; }
 
-        /// <value>TODO</value>
+        /// <value>Team client used to work with team fields</value>
         public TeamHttpClient TeamClient { get; private set; }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace WorkItemGenerator.Services
         /// <summary>
         /// Constructor for the service.
         /// </summary>
-        /// <param name="serverUrl">URI for the collection</param>
+        /// <param name="serverUri">URI for the collection</param>
         /// <param name="projectName">Project Name </param>
         /// <param name="personalAccessToken">PAT for connecting to the service</param>
         public AzureDevOpsService(Uri serverUri, string projectName, string personalAccessToken)
@@ -91,7 +91,7 @@ namespace WorkItemGenerator.Services
         /// <returns>Created work item id</returns>
         public async Task<int> CreateWorkItem(WorkItemModel item)
         {
-            JsonPatchDocument document = item.ToJsonPathDocument();
+            JsonPatchDocument document = item.ToJsonPatchDocument();
             WorkItem createdItem = await WitClient.CreateWorkItemAsync(document, ProjectName, item.WorkItemType);
             return createdItem.Id.Value;
         }

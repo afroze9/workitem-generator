@@ -39,19 +39,19 @@ namespace WorkItemGenerator.Tests
         [Fact]
         public void ToJsonPatchDocumentShouldSuccessfullyConvertWorkitemModel()
         {
-            Assert.NotNull(ValidWorkItemModelWithoutLinks.ToJsonPathDocument());
+            Assert.NotNull(ValidWorkItemModelWithoutLinks.ToJsonPatchDocument());
         }
 
         [Fact]
         public void ToJsonPatchDocumentShouldThrowArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => InvalidWorkItemModelA.ToJsonPathDocument());
+            Assert.Throws<ArgumentNullException>(() => InvalidWorkItemModelA.ToJsonPatchDocument());
         }
 
         [Fact]
         public void ToJsonPatchDocumentShouldThrowArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => InvalidWorkItemModelB.ToJsonPathDocument());
+            Assert.Throws<ArgumentException>(() => InvalidWorkItemModelB.ToJsonPatchDocument());
         }
     }
 }

@@ -6,9 +6,18 @@ using WorkItemGenerator.Models;
 
 namespace WorkItemGenerator.Services
 {
+    /// <summary>
+    /// Extension methods for WorkItemModel.
+    /// </summary>
     public static class WorkItemModelExtensions
     {
-        public static JsonPatchDocument ToJsonPathDocument(this WorkItemModel item)
+
+        /// <summary>
+        /// Converts a WorkItemModel to a JsonPatchDocument.
+        /// </summary>
+        /// <param name="item">The item to convert.</param>
+        /// <returns></returns>
+        public static JsonPatchDocument ToJsonPatchDocument(this WorkItemModel item)
         {
             JsonPatchDocument document = new JsonPatchDocument();
 
